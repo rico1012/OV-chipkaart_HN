@@ -1,9 +1,8 @@
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
+@Table(name = "ov_chipkaart")
 public class OV_Chipkaart {
     @Id
     @Column(name = "kaart_nummer")
@@ -14,28 +13,28 @@ public class OV_Chipkaart {
     @ManyToOne
     @JoinColumn(name = "reiziger_id")
     private Reiziger reiziger;
-    @ManyToMany(mappedBy = "ovChipkaart_kaart_nummer")
-    private List<Product> product_nummer;
+    @ManyToMany(mappedBy = "ovChipkaarts")
+    private Set<Product> products;
 
 
-    public OV_Chipkaart(Date geldig_Tot, int klasse, double saldo, Reiziger reiziger, List<Product> producten) {
+    public OV_Chipkaart(Date geldig_Tot, int klasse, double saldo, Reiziger reiziger, Set<Product> producten) {
         this.geldig_Tot = geldig_Tot;
         this.klasse = klasse;
         this.saldo = saldo;
         this.reiziger = reiziger;
-        this.product_nummer = producten;
+        this.products = producten;
     }
 
     public OV_Chipkaart() {
 
     }
 
-    public List<Product> getProducten() {
-        return product_nummer;
+    public Set<Product> getProducten() {
+        return products;
     }
 
-    public void setProducten(List<Product> producten) {
-        this.product_nummer = producten;
+    public void setProducten(Set<Product> producten) {
+        this.products = producten;
     }
 
     public long getKaartNummer() {
@@ -90,7 +89,7 @@ public class OV_Chipkaart {
                 ", klasse=" + klasse +
                 ", saldo=" + saldo +
                 ", reiziger=" + reiziger +
-                ", producten" + product_nummer +
+                ", producten" + products +
                 '}';
     }
 }

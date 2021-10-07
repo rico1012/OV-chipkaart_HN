@@ -1,8 +1,11 @@
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
     @Column(name = "product_nummer")
@@ -11,19 +14,14 @@ public class Product {
     private String beschrijving;
     private double prijs;
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "ov_chipkaart_product",
-            joinColumns = @JoinColumn(name = "kaart_nummer"),
-            inverseJoinColumns = @JoinColumn(name = "product_nummer"))
-    private List<OV_Chipkaart> ovChipkaart_kaart_nummer;
+            joinColumns = {@JoinColumn(name = "kaart_nummer")},
+            inverseJoinColumns = {@JoinColumn(name = "product_nummer")})
+    Set<OV_Chipkaart> ovChipkaarts=new HashSet<>();;
 
-    public Product(String naam, String beschrijving, double prijs) {
-        this.naam = naam;
-        this.beschrijving = beschrijving;
-        this.prijs = prijs;
-//        this.ovChipkaarten = new ArrayList<>();
-    }
+
 
     public Product(int product_nummer, String naam, String beschrijving, double prijs) {
         this.productnummer = product_nummer;
@@ -48,7 +46,7 @@ public class Product {
                 ", naam='" + naam + '\'' +
                 ", beschrijving='" + beschrijving + '\'' +
                 ", prijs=" + prijs + '\'' +
-                ", ovchipkaarten="+ovChipkaart_kaart_nummer+
+                ", ovchipkaarten="+ovChipkaarts+
                 '}';
     }
 
@@ -85,11 +83,11 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public List<OV_Chipkaart> getOvChipkaart() {
-        return ovChipkaart_kaart_nummer;
+    public Set<OV_Chipkaart> getOvChipkaart() {
+        return ovChipkaarts;
     }
 
-    public void setOvChipkaarten(List<OV_Chipkaart> ovChipkaart) {
-        this.ovChipkaart_kaart_nummer = ovChipkaart;
+    public void setOvChipkaarten(Set<OV_Chipkaart> ovChipkaart) {
+        this.ovChipkaarts = ovChipkaart;
     }
 }
